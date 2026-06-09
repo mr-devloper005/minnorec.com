@@ -95,26 +95,22 @@ export function TaskArchiveView({ task, posts, pagination, category, basePath }:
   return (
     <EditableSiteShell>
       <main style={archiveVars} className="bg-[var(--archive-bg)] text-[var(--archive-text)]">
-        <section className="mx-auto grid max-w-[var(--editable-container)] gap-8 px-4 py-12 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:px-8 lg:py-20">
-          <div className="rounded-[2.5rem] border border-[var(--editable-border)] bg-[var(--archive-surface)] p-7 shadow-[0_24px_80px_rgba(15,23,42,0.08)] sm:p-10">
-            <div className="inline-flex items-center gap-2 rounded-full border border-[var(--editable-border)] bg-white/70 px-4 py-2 text-xs font-black uppercase tracking-[0.24em] text-[var(--archive-accent)]"><Icon className="h-4 w-4" /> {label}</div>
-            <h1 className="mt-5 max-w-4xl text-5xl font-black leading-[0.95] tracking-[-0.07em] sm:text-6xl">{voice?.headline || `Browse ${label}`}</h1>
-            <p className="mt-6 max-w-2xl text-base leading-8 opacity-70">{voice?.description || SITE_CONFIG.description}</p>
-            <div className="mt-6 rounded-[1.5rem] border border-[var(--editable-border)] bg-white/55 p-4 text-sm font-bold leading-7 opacity-75">{deck.promise}</div>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link href={basePath} className="rounded-full bg-[var(--archive-text)] px-5 py-3 text-sm font-black text-[var(--archive-bg)]">Browse all</Link>
-              <Link href="/search" className="rounded-full border border-[var(--editable-border)] px-5 py-3 text-sm font-black">Search posts</Link>
-            </div>
+        <section className="border-b border-black/10 bg-[#f3f0eb]">
+          <div className="mx-auto max-w-[var(--editable-container)] px-4 py-14 text-center sm:px-6 lg:px-8 lg:py-20">
+            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.12em] text-[var(--archive-accent)]"><Icon className="h-4 w-4" /> {label}</div>
+            <h1 className="mx-auto mt-4 max-w-4xl font-serif text-5xl font-normal leading-none sm:text-6xl">{voice?.headline || `Browse ${label}`}</h1>
+            <p className="mx-auto mt-5 max-w-2xl text-base leading-7 opacity-65">{voice?.description || SITE_CONFIG.description}</p>
+            <p className="mx-auto mt-3 max-w-2xl text-sm font-semibold opacity-55">{deck.promise}</p>
           </div>
-
-          <form action={basePath} className="self-end rounded-[2rem] border border-[var(--editable-border)] bg-white/70 p-5 shadow-sm backdrop-blur">
-            <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.2em] opacity-55"><Filter className="h-4 w-4" /> Filter</div>
-            <select name="category" defaultValue={category} className="mt-4 h-12 w-full rounded-2xl border border-[var(--editable-border)] bg-white px-4 text-sm font-bold outline-none">
+          <form action={basePath} className="mx-auto flex max-w-[var(--editable-container)] flex-col gap-3 border-t border-black/10 bg-white px-4 py-4 sm:flex-row sm:items-center sm:px-6 lg:px-8">
+            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.12em]"><Filter className="h-4 w-4" /> Filter</div>
+            <select name="category" defaultValue={category} className="h-11 min-w-0 flex-1 border border-[var(--editable-border)] bg-white px-4 text-sm font-bold outline-none sm:max-w-sm">
               <option value="all">All categories</option>
               {CATEGORY_OPTIONS.map((item) => <option key={item.slug} value={item.slug}>{item.name}</option>)}
             </select>
-            <button className="mt-3 h-12 w-full rounded-2xl bg-[var(--archive-text)] text-sm font-black text-[var(--archive-bg)]">Apply</button>
-            <p className="mt-3 text-xs font-bold opacity-55">Showing: {categoryLabel}</p>
+            <button className="h-11 bg-[var(--archive-text)] px-7 text-sm font-bold text-white">Apply</button>
+            <Link href={basePath} className="px-3 text-sm font-bold">Clear</Link>
+            <p className="text-xs font-bold opacity-50 sm:ml-auto">Showing: {categoryLabel}</p>
           </form>
         </section>
 
@@ -124,7 +120,7 @@ export function TaskArchiveView({ task, posts, pagination, category, basePath }:
               {posts.map((post, index) => <ArchivePostCard key={post.id || post.slug} post={post} task={task} basePath={basePath} index={index} />)}
             </div>
           ) : (
-            <div className="rounded-[2rem] border border-dashed border-[var(--editable-border)] bg-white/60 p-10 text-center">
+            <div className="border border-dashed border-[var(--editable-border)] bg-[#f7f7f5] p-12 text-center">
               <Search className="mx-auto h-8 w-8 opacity-45" />
               <h2 className="mt-4 text-3xl font-black tracking-[-0.05em]">No posts found</h2>
               <p className="mt-2 text-sm opacity-65">Try another category or refresh this page after publishing new content.</p>
@@ -132,9 +128,9 @@ export function TaskArchiveView({ task, posts, pagination, category, basePath }:
           )}
 
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-            {pagination.hasPrevPage ? <Link href={pageHref(basePath, category, page - 1)} className="rounded-full border border-[var(--editable-border)] bg-white px-5 py-3 text-sm font-black">Previous</Link> : null}
-            <span className="rounded-full bg-[var(--archive-text)] px-5 py-3 text-sm font-black text-[var(--archive-bg)]">Page {page} of {pagination.totalPages || 1}</span>
-            {pagination.hasNextPage ? <Link href={pageHref(basePath, category, page + 1)} className="rounded-full border border-[var(--editable-border)] bg-white px-5 py-3 text-sm font-black">Next</Link> : null}
+            {pagination.hasPrevPage ? <Link href={pageHref(basePath, category, page - 1)} className="border border-[var(--editable-border)] bg-white px-5 py-3 text-sm font-bold">Previous</Link> : null}
+            <span className="bg-[var(--archive-text)] px-5 py-3 text-sm font-bold text-white">Page {page} of {pagination.totalPages || 1}</span>
+            {pagination.hasNextPage ? <Link href={pageHref(basePath, category, page + 1)} className="border border-[var(--editable-border)] bg-white px-5 py-3 text-sm font-bold">Next</Link> : null}
           </div>
         </section>
       </main>
@@ -224,13 +220,13 @@ function ClassifiedArchiveCard({ post, href }: { post: SitePost; href: string })
 function ImageArchiveCard({ post, href, index }: { post: SitePost; href: string; index: number }) {
   const image = getImage(post)
   return (
-    <Link href={href} className="group mb-5 block break-inside-avoid overflow-hidden rounded-[2rem] border border-[var(--editable-border)] bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+    <Link href={href} className="group mb-5 block break-inside-avoid overflow-hidden border border-[var(--editable-border)] bg-white transition hover:-translate-y-1 hover:shadow-xl">
       <div className={index % 3 === 0 ? 'aspect-[3/4]' : 'aspect-[4/3]'}>
         <img src={image} alt="" className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
       </div>
       <div className="p-5">
-        <div className="inline-flex items-center gap-2 rounded-full bg-[var(--archive-bg)] px-3 py-1 text-[10px] font-black uppercase tracking-[0.16em]"><ImageIcon className="h-3 w-3" /> Visual</div>
-        <h2 className="mt-4 line-clamp-3 text-xl font-black leading-tight tracking-[-0.04em]">{post.title}</h2>
+        <div className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.12em] text-[#ef4f2b]"><ImageIcon className="h-3 w-3" /> Visual</div>
+        <h2 className="mt-3 line-clamp-3 font-serif text-2xl font-normal leading-tight">{post.title}</h2>
       </div>
     </Link>
   )
@@ -270,12 +266,12 @@ function ProfileArchiveCard({ post, href }: { post: SitePost; href: string }) {
   const avatar = getImages(post)[0]
   const role = getField(post, ['role', 'designation', 'company', 'location'])
   return (
-    <Link href={href} className="group rounded-[2rem] border border-[var(--editable-border)] bg-white p-6 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
-      <div className="mx-auto flex h-28 w-28 items-center justify-center overflow-hidden rounded-full bg-[var(--archive-bg)] ring-1 ring-[var(--editable-border)]">
+    <Link href={href} className="group border border-[var(--editable-border)] bg-white p-5 text-left transition hover:-translate-y-1 hover:shadow-xl">
+      <div className="flex aspect-[4/5] w-full items-center justify-center overflow-hidden bg-[var(--archive-bg)]">
         {avatar ? <img src={avatar} alt="" className="h-full w-full object-cover" /> : <UserRound className="h-10 w-10 opacity-45" />}
       </div>
-      <h2 className="mt-5 text-xl font-black leading-tight tracking-[-0.04em]">{post.title}</h2>
-      {role ? <p className="mt-2 text-xs font-black uppercase tracking-[0.16em] text-[var(--archive-accent)]">{role}</p> : null}
+      <h2 className="mt-5 font-serif text-2xl font-normal leading-tight">{post.title}</h2>
+      {role ? <p className="mt-2 text-xs font-bold uppercase tracking-[0.12em] text-[var(--archive-accent)]">{role}</p> : null}
       <p className="mt-4 line-clamp-3 text-sm leading-6 opacity-65">{getSummary(post)}</p>
     </Link>
   )
