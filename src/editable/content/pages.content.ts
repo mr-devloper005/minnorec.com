@@ -3,16 +3,16 @@ import { slot4BrandConfig } from '@/editable/theme/brand.config'
 export const pagesContent = {
   home: {
     metadata: {
-      title: 'Stories, visuals, and discoverable content',
-      description: 'Explore articles, images, listings, and curated posts through a cleaner reading-first experience.',
-      openGraphTitle: 'Stories, visuals, and discoverable content',
-      openGraphDescription: 'Discover articles, visual posts, and connected content through a calmer reading-first experience.',
-      keywords: ['story platform', 'article site', 'visual content', 'content discovery'],
+      title: 'Discover visual portfolios and creative profiles',
+      description: 'Explore photography, design, art, creative portfolios, and the people behind the work.',
+      openGraphTitle: 'Discover visual portfolios and creative profiles',
+      openGraphDescription: 'Find remarkable visual work and meet the independent creators, studios, and businesses behind it.',
+      keywords: ['creative portfolio', 'photography', 'design inspiration', 'artist profiles'],
     },
     hero: {
-      badge: 'Latest stories and visuals',
-      title: ['A thoughtful home for', 'stories, visuals, and discovery.'],
-      description: 'Explore fresh articles, image-led posts, and discoverable content across the platform through a calmer and clearer browsing experience.',
+      badge: 'Fresh visual work',
+      title: ['Discover work with', 'a point of view.'],
+      description: 'Explore image-led projects and discover the creators, studios, and businesses behind them.',
       primaryCta: { label: 'Read latest stories', href: '/article' },
       secondaryCta: { label: 'Explore visuals', href: '/image' },
       searchPlaceholder: 'Search stories, visuals, listings, and more',

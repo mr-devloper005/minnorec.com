@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import type { CSSProperties } from 'react'
 import { notFound } from 'next/navigation'
-import { ArrowLeft, Bookmark, Building2, Camera, CheckCircle2, Download, ExternalLink, FileText, Globe2, Mail, MapPin, MessageCircle, Phone, Tag, UserRound } from 'lucide-react'
+import { Bookmark, Building2, Camera, CheckCircle2, Download, ExternalLink, FileText, Globe2, Mail, MapPin, MessageCircle, Phone, Tag, UserRound } from 'lucide-react'
 import { buildPostMetadata, buildTaskMetadata } from '@/lib/seo'
 import { buildPostUrl, fetchArticleComments, fetchTaskPostBySlug, fetchTaskPosts } from '@/lib/task-data'
 import { getTaskConfig, SITE_CONFIG, type TaskKey } from '@/lib/site-config'
@@ -51,7 +51,7 @@ const getImages = (post: SitePost) => {
 
 const getBody = (post: SitePost) => {
   const content = getContent(post)
-  return asText(content.body) || asText(content.description) || asText(content.details) || post.summary || 'Details will appear here once available.'
+  return asText(content.body) || asText(content.description) || asText(content.details) ||  'Details will appear here once available.'
 }
 
 const escapeHtml = (value: string) => value
@@ -126,8 +126,8 @@ export function TaskDetailView({ task, post, related, comments = [] }: { task: T
 function BackLink({ task }: { task: TaskKey }) {
   const taskConfig = getTaskConfig(task)
   return (
-    <Link href={taskConfig?.route || '/'} className="inline-flex items-center gap-2 rounded-full border border-[var(--editable-border)] bg-white/70 px-4 py-2 text-sm font-black">
-      <ArrowLeft className="h-4 w-4" /> Back to {taskConfig?.label || 'posts'}
+    <Link href={taskConfig?.route || '/'} className="inline-flex items-center gap-2 border-b border-black/30 pb-1 text-sm font-bold">
+      
     </Link>
   )
 }
@@ -222,24 +222,28 @@ function ClassifiedDetail({ post, related }: { post: SitePost; related: SitePost
 
 function ImageDetail({ post, related }: { post: SitePost; related: SitePost[] }) {
   const images = getImages(post)
+  const heroImage = images[0] || '/placeholder.svg?height=900&width=1200'
   return (
     <section className="mx-auto max-w-[var(--editable-container)] px-4 py-10 sm:px-6 lg:px-8 lg:py-16">
       <BackLink task="image" />
-      <div className="mt-8 grid gap-8 lg:grid-cols-[0.72fr_1.28fr]">
-        <aside className="rounded-[2.5rem] border border-[var(--editable-border)] bg-white p-7 lg:sticky lg:top-24 lg:self-start">
-          <div className="inline-flex items-center gap-2 rounded-full bg-[var(--detail-text)] px-4 py-2 text-xs font-black uppercase tracking-[0.2em] text-[var(--detail-bg)]"><Camera className="h-4 w-4" /> Image story</div>
-          <h1 className="mt-6 text-4xl font-black leading-[0.98] tracking-[-0.07em] sm:text-5xl">{post.title}</h1>
+      <div className="mt-8 grid overflow-hidden border border-black/10 bg-[#f3f0eb] lg:grid-cols-[.68fr_1.32fr]">
+        <aside className="flex flex-col justify-center p-7 sm:p-10 lg:min-h-[520px]">
+          <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.12em] text-[#ef4f2b]"><Camera className="h-4 w-4" /> Image story</div>
+          <h1 className="mt-6 font-serif text-5xl font-normal leading-none sm:text-6xl">{post.title}</h1>
           <p className="mt-5 text-base leading-8 opacity-70">{summaryText(post)}</p>
           <BodyContent post={post} compact />
         </aside>
-        <div className="columns-1 gap-5 space-y-5 md:columns-2">
-          {(images.length ? images : ['/placeholder.svg?height=900&width=1200']).map((image, index) => (
-            <figure key={`${image}-${index}`} className="break-inside-avoid overflow-hidden rounded-[2rem] border border-[var(--editable-border)] bg-white shadow-sm">
+        <div className="relative min-h-[420px] bg-[#293d4c]">
+          <img src={heroImage} alt="" className="absolute inset-0 h-full w-full object-cover" />
+        </div>
+      </div>
+      <div className="mt-8 columns-1 gap-5 space-y-5 md:columns-2 lg:columns-3">
+        {(images.length ? images : [heroImage]).map((image, index) => (
+          <figure key={`${image}-${index}`} className="break-inside-avoid overflow-hidden border border-[var(--editable-border)] bg-white">
               <img src={image} alt="" className="w-full object-cover" />
               {index === 0 ? <figcaption className="p-5 text-sm font-bold opacity-65">Featured visual from this image post.</figcaption> : null}
             </figure>
-          ))}
-        </div>
+        ))}
       </div>
       <div className="mt-10"><RelatedPanel task="image" post={post} related={related} /></div>
     </section>
@@ -297,22 +301,98 @@ function ProfileDetail({ post, related }: { post: SitePost; related: SitePost[] 
   const role = getField(post, ['role', 'designation', 'company', 'location'])
   const website = getField(post, ['website', 'url'])
   const email = getField(post, ['email'])
+  const portrait = images[0]
   return (
-    <section className="mx-auto grid max-w-[var(--editable-container)] gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[420px_minmax(0,1fr)] lg:px-8 lg:py-16">
-      <aside className="rounded-[2.7rem] border border-[var(--editable-border)] bg-white p-8 text-center shadow-[0_30px_90px_rgba(15,23,42,0.08)] lg:sticky lg:top-24 lg:self-start">
-        <BackLink task="profile" />
-        <div className="mx-auto mt-10 flex h-40 w-40 items-center justify-center overflow-hidden rounded-full bg-[var(--detail-bg)] ring-1 ring-[var(--editable-border)]">
-          {images[0] ? <img src={images[0]} alt="" className="h-full w-full object-cover" /> : <UserRound className="h-16 w-16 opacity-45" />}
+    <section className="mx-auto max-w-[var(--editable-container)] px-4 py-10 sm:px-6 lg:px-8 lg:py-16">
+      <BackLink task="profile" />
+      <div className="mt-8 overflow-hidden border border-black/10 bg-[#293d4c] text-white">
+        <div className="grid gap-0 lg:grid-cols-[.88fr_1.12fr]">
+          <aside className="relative min-h-[520px] p-6 sm:p-10">
+            <div className="absolute inset-0 opacity-20">
+              {portrait ? <img src={portrait} alt="" className="h-full w-full object-cover blur-sm" /> : null}
+            </div>
+            <div className="relative z-10 flex h-full min-h-[460px] items-center justify-center">
+              <div className="w-full max-w-[520px] border border-white/15 bg-[#141c22] p-5 shadow-[0_30px_90px_rgba(0,0,0,.28)]">
+                <div className="flex aspect-[4/5] items-center justify-center overflow-hidden bg-white">
+                  {portrait ? <img src={portrait} alt="" className="h-full w-full object-contain" /> : <UserRound className="h-16 w-16 text-black/40" />}
+                </div>
+                <div className="mt-5 flex items-center justify-between gap-4">
+                  <p className="text-xs font-bold uppercase tracking-[0.12em] text-white/55">Profile image</p>
+                  <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#ffb7a7]">{categoryOf(post, 'Creator')}</p>
+                </div>
+              </div>
+            </div>
+          </aside>
+
+          <article className="flex min-h-[520px] flex-col justify-center bg-[#f3f0eb] p-7 text-[#1e1b17] sm:p-10 lg:p-14">
+            <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#ef4f2b]">Creative profile</p>
+            <h1 className="mt-5 max-w-3xl font-serif text-5xl font-normal leading-none sm:text-6xl lg:text-7xl">{post.title}</h1>
+            {role ? <p className="mt-5 text-xs font-bold uppercase tracking-[0.12em] text-[#ef4f2b]">{role}</p> : null}
+            <p className="mt-6 max-w-3xl text-base leading-8 text-black/68">{summaryText(post)}</p>
+            <div className="mt-8 grid gap-px bg-black/10 sm:grid-cols-3">
+              {[
+                ['Focus', categoryOf(post, 'Profile')],
+                ['Media', `${images.length || 1} image${(images.length || 1) === 1 ? '' : 's'}`],
+                ['Profile', website ? 'Website linked' : email ? 'Email linked' : 'Details inside'],
+              ].map(([label, value]) => (
+                <div key={label} className="bg-white p-5">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#ef4f2b]">{label}</p>
+                  <p className="mt-3 line-clamp-2 font-serif text-2xl leading-tight">{value}</p>
+                </div>
+              ))}
+            </div>
+            <ContactAction website={website} email={email} />
+          </article>
         </div>
-        <h1 className="mt-6 text-4xl font-black leading-[0.98] tracking-[-0.07em]">{post.title}</h1>
-        {role ? <p className="mt-3 text-xs font-black uppercase tracking-[0.18em] text-[var(--detail-accent)]">{role}</p> : null}
-        <ContactAction website={website} email={email} />
-      </aside>
-      <article className="rounded-[2.7rem] border border-[var(--editable-border)] bg-white p-7 shadow-sm sm:p-10">
-        <BodyContent post={post} />
-        <ImageStrip images={images.slice(1)} label="Profile gallery" />
-        <RelatedPanel task="profile" post={post} related={related} />
-      </article>
+      </div>
+
+      <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_380px]">
+        <article className="border-t-4 border-[#ef4f2b] bg-[#f7f7f5] p-7 sm:p-10">
+          <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#ef4f2b]">Profile notes</p>
+          <h2 className="mt-4 font-serif text-4xl font-normal leading-tight">Background, services, and useful context.</h2>
+          <BodyContent post={post} />
+        </article>
+
+        <aside className="grid gap-5">
+          {images.slice(1, 4).length ? (
+            <div className="grid gap-3 bg-[#293d4c] p-4">
+              <p className="px-1 text-xs font-bold uppercase tracking-[0.12em] text-white/60">Profile gallery</p>
+              {images.slice(1, 4).map((image, index) => (
+                <img key={`${image}-${index}`} src={image} alt="" className="aspect-[4/3] w-full bg-white object-cover" />
+              ))}
+            </div>
+          ) : null}
+          <RelatedPanel task="profile" post={post} related={related} compact />
+        </aside>
+      </div>
+
+      {related.length ? (
+        <section className="mt-12">
+          <div className="flex items-end justify-between gap-6">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#ef4f2b]">More profiles</p>
+              <h2 className="mt-2 font-serif text-4xl font-normal leading-tight">Keep browsing the community.</h2>
+            </div>
+            <Link href="/profile" className="hidden text-sm font-bold sm:inline">View all</Link>
+          </div>
+          <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {related.map((item) => {
+              const image = getImages(item)[0]
+              return (
+                <Link key={item.id || item.slug} href={buildPostUrl('profile', item.slug)} className="group border border-black/10 bg-white">
+                  <div className="flex aspect-[4/5] items-center justify-center overflow-hidden bg-[#f3f0eb]">
+                    {image ? <img src={image} alt="" className="h-full w-full object-cover transition duration-500 group-hover:scale-105" /> : <UserRound className="h-10 w-10 opacity-40" />}
+                  </div>
+                  <div className="p-5">
+                    <h3 className="line-clamp-2 font-serif text-2xl leading-tight">{item.title}</h3>
+                    <p className="mt-3 line-clamp-2 text-sm leading-6 text-black/60">{summaryText(item)}</p>
+                  </div>
+                </Link>
+              )
+            })}
+          </div>
+        </section>
+      ) : null}
     </section>
   )
 }
@@ -375,7 +455,7 @@ function BadgeLine({ label, value }: { label: string; value: string }) {
   return <div className="flex items-center justify-between gap-4 rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-sm"><span className="font-black uppercase tracking-[0.16em] opacity-60">{label}</span><span className="font-black">{value}</span></div>
 }
 
-function RelatedPanel({ task, post, related, compact = false }: { task: TaskKey; post: SitePost; related: SitePost[]; compact?: boolean }) {
+function RelatedPanel({ task, post: _post, related, compact = false }: { task: TaskKey; post: SitePost; related: SitePost[]; compact?: boolean }) {
   const taskConfig = getTaskConfig(task)
   return (
     <aside className="min-w-0 space-y-5">
@@ -385,7 +465,7 @@ function RelatedPanel({ task, post, related, compact = false }: { task: TaskKey;
           <div className="mt-4 grid gap-3 text-sm font-bold opacity-75">
             <p className="inline-flex items-center gap-2"><Tag className="h-4 w-4" /> Task: {taskConfig?.label || task}</p>
             <p className="inline-flex items-center gap-2"><CheckCircle2 className="h-4 w-4" /> Site: {SITE_CONFIG.name}</p>
-            {post.publishedAt ? <p>Published: {new Date(post.publishedAt).toLocaleDateString()}</p> : null}
+            
           </div>
         </div>
       ) : null}
