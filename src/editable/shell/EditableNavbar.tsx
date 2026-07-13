@@ -24,8 +24,9 @@ export function EditableNavbar() {
     <header className="sticky top-0 z-50 bg-white text-[#1e1b17] shadow-[0_1px_0_rgba(30,27,23,.12)]">
 
       <div className="mx-auto flex h-[76px] max-w-[1552px] items-center gap-5 px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="shrink-0 font-serif text-3xl leading-none text-[#ef4f2b] sm:text-4xl">
-          {SITE_CONFIG.name.replace(/\.(com|net|org)$/i, '')}<span className="text-[#ef4f2b]">.</span>
+        <Link href="/" className="flex shrink-0 items-center gap-3 font-serif text-3xl leading-none text-[#ef4f2b] sm:text-4xl">
+          <img src="/favicon.png" alt={`${SITE_CONFIG.name} logo`} className="h-10 w-10 rounded-lg object-contain sm:h-11 sm:w-11" />
+          <span>{SITE_CONFIG.name.replace(/\.(com|net|org)$/i, '')}<span className="text-[#ef4f2b]">.</span></span>
         </Link>
 
         <form action="/search" className="mx-auto hidden min-w-0 max-w-3xl flex-1 md:flex">
