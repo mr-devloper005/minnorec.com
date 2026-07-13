@@ -7,6 +7,18 @@ import { pagesContent } from '@/editable/content/pages.content'
 import { editableDesignContract as dc, editablePalette as pal } from '@/editable/layouts/design-contract'
 import { ArticleListCard, postHref } from '@/editable/cards/PostCards'
 
+const decodeEntities = (value: string) => value
+  .replace(/&nbsp;/gi, ' ')
+  .replace(/&amp;/gi, '&')
+  .replace(/&lt;/gi, '<')
+  .replace(/&gt;/gi, '>')
+  .replace(/&quot;/gi, '"')
+  .replace(/&#39;/gi, "'")
+  .replace(/&apos;/gi, "'")
+  .replace(/&#(\d+);/g, (_m, code) => String.fromCharCode(Number(code)))
+  .replace(/&#x([0-9a-f]+);/gi, (_m, code) => String.fromCharCode(parseInt(code, 16)))
+const stripHtml = (value: string) => decodeEntities(value.replace(/<[^>]+>/g, ' ')).replace(/\s+/g, ' ').trim()
+
 export function EditableArticleArchive({ posts, pagination, category = 'all', basePath = '/article' }: { posts: SitePost[]; pagination: SiteFeedPagination; category?: string; basePath?: string }) {
   const voice = taskPageVoices.article
   const page = pagination.page || 1
@@ -69,7 +81,7 @@ export function EditableArticleDetailShell({ slug, post }: { slug: string; post:
       </section>
       <section className="mx-auto w-full max-w-5xl px-4 pb-16 pt-6 sm:px-6 lg:px-8 lg:pb-24">
         <div className={`rounded-[2.25rem] border ${pal.border} bg-white p-6 shadow-[0_24px_80px_rgba(24,20,17,0.08)] sm:p-8 lg:p-10`}>
-          <p className={`text-sm leading-8 ${pal.softMutedText}`}>{post?.summary || `Article detail content for ${slug} will render through the editable detail page.`}</p>
+          <p className={`text-sm leading-8 ${pal.softMutedText}`}>{stripHtml(post?.summary || '') || `Article detail content for ${slug} will render through the editable detail page.`}</p>
         </div>
       </section>
     </main>
