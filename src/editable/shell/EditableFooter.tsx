@@ -27,7 +27,10 @@ export function EditableFooter() {
       <div className="bg-[#292d31] text-white">
         <div className="mx-auto grid max-w-[1552px] gap-10 px-6 py-14 md:grid-cols-[1.4fr_1fr_1fr] lg:px-8">
           <div>
-            <Link href="/" className="font-serif text-4xl text-[#ff6846]">{SITE_CONFIG.name}</Link>
+            <Link href="/" className="inline-flex items-center gap-3 font-serif text-4xl text-[#ff6846]">
+              <img src="/favicon.png" alt={`${SITE_CONFIG.name} logo`} className="h-11 w-11 rounded-lg object-contain" />
+              <span>{SITE_CONFIG.name}</span>
+            </Link>
             <p className="mt-5 max-w-md text-sm leading-7 text-white/65">A visual directory for finding remarkable work and the people who make it.</p>
           </div>
           
