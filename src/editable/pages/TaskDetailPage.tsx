@@ -83,17 +83,35 @@ const sanitizeHtml = (html: string) => hardenLinks(html
   .replace(/\s+on\w+=("[^"]*"|'[^']*'|[^\s>]+)/gi, '')
   .replace(/(href|src)=(['"])javascript:[\s\S]*?\2/gi, '$1="#"'))
 
+const decodeEntities = (value: string) => value
+  .replace(/&nbsp;/gi, ' ')
+  .replace(/&amp;/gi, '&')
+  .replace(/&lt;/gi, '<')
+  .replace(/&gt;/gi, '>')
+  .replace(/&quot;/gi, '"')
+  .replace(/&#39;/gi, "'")
+  .replace(/&apos;/gi, "'")
+  .replace(/&#(\d+);/g, (_m, code) => String.fromCharCode(Number(code)))
+  .replace(/&#x([0-9a-f]+);/gi, (_m, code) => String.fromCharCode(parseInt(code, 16)))
+
+const looksLikeHtml = (value: string) => /<\/?[a-z][\s\S]*?>/i.test(value)
+const looksLikeEncodedHtml = (value: string) => /&lt;\/?[a-z][\s\S]*?&gt;/i.test(value)
+
 const formatPlainText = (raw: string) => {
-  const value = raw.trim()
+  let value = raw.trim()
   if (!value) return ''
-  if (/<[a-z][\s\S]*>/i.test(value)) return sanitizeHtml(linkifyMarkdown(value))
+  if (!looksLikeHtml(value) && looksLikeEncodedHtml(value)) {
+    value = decodeEntities(value)
+  }
+  if (looksLikeHtml(value)) return sanitizeHtml(linkifyMarkdown(value))
   return value
     .split(/\n{2,}/)
     .map((part) => `<p>${linkifyText(escapeHtml(part).replace(/\n/g, '<br />'))}</p>`)
     .join('')
 }
 
-const summaryText = (post: SitePost) => post.summary || asText(getContent(post).description) || asText(getContent(post).excerpt) || ''
+const stripHtml = (value: string) => decodeEntities(value.replace(/<[^>]+>/g, ' ')).replace(/\s+/g, ' ').trim()
+const summaryText = (post: SitePost) => stripHtml(post.summary || asText(getContent(post).description) || asText(getContent(post).excerpt) || '')
 const categoryOf = (post: SitePost, fallback: string) => asText(getContent(post).category) || post.tags?.[0] || fallback
 const mapSrcFor = (post: SitePost) => {
   const address = getField(post, ['address', 'location', 'city'])

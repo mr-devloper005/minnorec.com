@@ -14,6 +14,17 @@ export function getEditablePostImage(post?: SitePost | null) {
   return mediaUrl || contentImage || logo || '/placeholder.svg?height=900&width=1400'
 }
 
+const decodeEntities = (value: string) => value
+  .replace(/&nbsp;/gi, ' ')
+  .replace(/&amp;/gi, '&')
+  .replace(/&lt;/gi, '<')
+  .replace(/&gt;/gi, '>')
+  .replace(/&quot;/gi, '"')
+  .replace(/&#39;/gi, "'")
+  .replace(/&apos;/gi, "'")
+  .replace(/&#(\d+);/g, (_m, code) => String.fromCharCode(Number(code)))
+  .replace(/&#x([0-9a-f]+);/gi, (_m, code) => String.fromCharCode(parseInt(code, 16)))
+
 export function getEditableExcerpt(post?: SitePost | null, limit = 150) {
   const content = post?.content && typeof post.content === 'object' ? post.content as Record<string, unknown> : {}
   const raw =
@@ -21,7 +32,7 @@ export function getEditableExcerpt(post?: SitePost | null, limit = 150) {
     (typeof content.summary === 'string' && content.summary) ||
     post?.summary ||
     ''
-  const clean = raw.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
+  const clean = decodeEntities(raw.replace(/<[^>]*>/g, ' ')).replace(/\s+/g, ' ').trim()
   return clean.length > limit ? `${clean.slice(0, limit).trim()}...` : clean
 }
 
