@@ -324,89 +324,64 @@ function ProfileDetail({ post, related }: { post: SitePost; related: SitePost[] 
   const email = getField(post, ['email'])
   const portrait = images[0]
   return (
-    <section className="mx-auto max-w-[var(--editable-container)] px-4 py-10 sm:px-6 lg:px-8 lg:py-16">
+    <section className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:py-12">
       <BackLink task="profile" />
-      <div className="mt-8 overflow-hidden border border-black/10 bg-[#293d4c] text-white">
-        <div className="grid gap-0 lg:grid-cols-[.88fr_1.12fr]">
-          <aside className="relative min-h-[520px] p-6 sm:p-10">
-            <div className="absolute inset-0 opacity-20">
-              {portrait ? <img src={portrait} alt="" className="h-full w-full object-cover blur-sm" /> : null}
-            </div>
-            <div className="relative z-10 flex h-full min-h-[460px] items-center justify-center">
-              <div className="w-full max-w-[520px] border border-white/15 bg-[#141c22] p-5 shadow-[0_30px_90px_rgba(0,0,0,.28)]">
-                <div className="flex aspect-[4/5] items-center justify-center overflow-hidden bg-white">
-                  {portrait ? <img src={portrait} alt="" className="h-full w-full object-contain" /> : <UserRound className="h-16 w-16 text-black/40" />}
-                </div>
-                <div className="mt-5 flex items-center justify-between gap-4">
-                  <p className="text-xs font-bold uppercase tracking-[0.12em] text-white/55">Profile image</p>
-                  <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#ffb7a7]">{categoryOf(post, 'Creator')}</p>
-                </div>
-              </div>
-            </div>
-          </aside>
 
-          <article className="flex min-h-[520px] flex-col justify-center bg-[#f3f0eb] p-7 text-[#1e1b17] sm:p-10 lg:p-14">
-            <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#ef4f2b]">Creative profile</p>
-            <h1 className="mt-5 max-w-3xl font-serif text-5xl font-normal leading-none sm:text-6xl lg:text-7xl">{post.title}</h1>
-            {role ? <p className="mt-5 text-xs font-bold uppercase tracking-[0.12em] text-[#ef4f2b]">{role}</p> : null}
-            <p className="mt-6 max-w-3xl text-base leading-8 text-black/68">{summaryText(post)}</p>
-            <div className="mt-8 grid gap-px bg-black/10 sm:grid-cols-3">
-              {[
-                ['Focus', categoryOf(post, 'Profile')],
-                ['Media', `${images.length || 1} image${(images.length || 1) === 1 ? '' : 's'}`],
-                ['Profile', website ? 'Website linked' : email ? 'Email linked' : 'Details inside'],
-              ].map(([label, value]) => (
-                <div key={label} className="bg-white p-5">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#ef4f2b]">{label}</p>
-                  <p className="mt-3 line-clamp-2 font-serif text-2xl leading-tight">{value}</p>
-                </div>
-              ))}
+      <div className="mt-6 overflow-hidden rounded-2xl border border-black/10 bg-white">
+        <div className="grid gap-0 sm:grid-cols-[220px_1fr]">
+          <div className="relative bg-[#293d4c]">
+            <div className="flex aspect-square w-full items-center justify-center overflow-hidden sm:aspect-auto sm:h-full">
+              {portrait ? <img src={portrait} alt="" className="h-full w-full object-cover" /> : <UserRound className="h-14 w-14 text-white/50" />}
             </div>
+          </div>
+          <div className="p-5 sm:p-7">
+            <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#ef4f2b]">{categoryOf(post, 'Creator')}</p>
+            <h1 className="mt-2 font-serif text-3xl font-normal leading-tight sm:text-4xl">{post.title}</h1>
+            {role ? <p className="mt-2 text-xs font-bold uppercase tracking-[0.12em] text-black/55">{role}</p> : null}
+            <p className="mt-4 text-sm leading-7 text-black/70">{summaryText(post)}</p>
             <ContactAction website={website} email={email} />
-          </article>
+          </div>
         </div>
       </div>
 
-      <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_380px]">
-        <article className="border-t-4 border-[#ef4f2b] bg-[#f7f7f5] p-7 sm:p-10">
-          <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#ef4f2b]">Profile notes</p>
-          <h2 className="mt-4 font-serif text-4xl font-normal leading-tight">Background, services, and useful context.</h2>
-          <BodyContent post={post} />
-        </article>
-
-        <aside className="grid gap-5">
-          {images.slice(1, 4).length ? (
-            <div className="grid gap-3 bg-[#293d4c] p-4">
-              <p className="px-1 text-xs font-bold uppercase tracking-[0.12em] text-white/60">Profile gallery</p>
-              {images.slice(1, 4).map((image, index) => (
-                <img key={`${image}-${index}`} src={image} alt="" className="aspect-[4/3] w-full bg-white object-cover" />
-              ))}
-            </div>
-          ) : null}
-          <RelatedPanel task="profile" post={post} related={related} compact />
-        </aside>
+      <div className="mt-6 grid grid-cols-3 gap-px overflow-hidden rounded-xl border border-black/10 bg-black/10 text-center">
+        {[
+          ['Focus', categoryOf(post, 'Profile')],
+          ['Media', `${images.length || 1} image${(images.length || 1) === 1 ? '' : 's'}`],
+          ['Profile', website ? 'Website' : email ? 'Email' : 'Inside'],
+        ].map(([label, value]) => (
+          <div key={label} className="bg-white p-3 sm:p-4">
+            <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#ef4f2b]">{label}</p>
+            <p className="mt-1 line-clamp-1 text-sm font-semibold">{value}</p>
+          </div>
+        ))}
       </div>
 
+      {images.slice(1, 4).length ? (
+        <div className="mt-6 grid grid-cols-3 gap-2">
+          {images.slice(1, 4).map((image, index) => (
+            <img key={`${image}-${index}`} src={image} alt="" className="aspect-square w-full rounded-lg bg-black/5 object-cover" />
+          ))}
+        </div>
+      ) : null}
+
       {related.length ? (
-        <section className="mt-12">
-          <div className="flex items-end justify-between gap-6">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#ef4f2b]">More profiles</p>
-              <h2 className="mt-2 font-serif text-4xl font-normal leading-tight">Keep browsing the community.</h2>
-            </div>
-            <Link href="/profile" className="hidden text-sm font-bold sm:inline">View all</Link>
+        <section className="mt-10">
+          <div className="flex items-end justify-between gap-4">
+            <h2 className="font-serif text-2xl font-normal leading-tight">More profiles</h2>
+            <Link href="/profile" className="text-xs font-bold uppercase tracking-[0.12em] text-[#ef4f2b]">View all</Link>
           </div>
-          <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {related.map((item) => {
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {related.slice(0, 3).map((item) => {
               const image = getImages(item)[0]
               return (
-                <Link key={item.id || item.slug} href={buildPostUrl('profile', item.slug)} className="group border border-black/10 bg-white">
-                  <div className="flex aspect-[4/5] items-center justify-center overflow-hidden bg-[#f3f0eb]">
-                    {image ? <img src={image} alt="" className="h-full w-full object-cover transition duration-500 group-hover:scale-105" /> : <UserRound className="h-10 w-10 opacity-40" />}
+                <Link key={item.id || item.slug} href={buildPostUrl('profile', item.slug)} className="group flex gap-3 rounded-xl border border-black/10 bg-white p-3 transition hover:shadow-md">
+                  <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-[#f3f0eb]">
+                    {image ? <img src={image} alt="" className="h-full w-full object-cover" /> : <UserRound className="h-6 w-6 opacity-40" />}
                   </div>
-                  <div className="p-5">
-                    <h3 className="line-clamp-2 font-serif text-2xl leading-tight">{item.title}</h3>
-                    <p className="mt-3 line-clamp-2 text-sm leading-6 text-black/60">{summaryText(item)}</p>
+                  <div className="min-w-0">
+                    <h3 className="line-clamp-2 text-sm font-semibold leading-tight">{item.title}</h3>
+                    <p className="mt-1 line-clamp-2 text-xs leading-5 text-black/55">{summaryText(item)}</p>
                   </div>
                 </Link>
               )
