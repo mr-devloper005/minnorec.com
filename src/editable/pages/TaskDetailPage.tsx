@@ -251,7 +251,7 @@ function ImageDetail({ post, related }: { post: SitePost; related: SitePost[] })
         <aside className="flex flex-col justify-center p-7 sm:p-10 lg:min-h-[520px]">
           <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.12em] text-[#ef4f2b]"><Camera className="h-4 w-4" /> Image story</div>
           <h1 className="mt-6 font-serif text-5xl font-normal leading-none sm:text-6xl">{post.title}</h1>
-          <p className="mt-5 text-base leading-8 opacity-70">{summaryText(post)}</p>
+     
           <BodyContent post={post} compact />
         </aside>
         <div className="relative min-h-[420px] bg-[#293d4c]">
