@@ -328,10 +328,10 @@ function ProfileDetail({ post, related }: { post: SitePost; related: SitePost[] 
       <BackLink task="profile" />
 
       <div className="mt-6 overflow-hidden rounded-2xl border border-black/10 bg-white">
-        <div className="grid gap-0 sm:grid-cols-[220px_1fr]">
+        <div className="grid gap-0 sm:grid-cols-[280px_1fr]">
           <div className="relative bg-[#293d4c]">
-            <div className="flex aspect-square w-full items-center justify-center overflow-hidden sm:aspect-auto sm:h-full">
-              {portrait ? <img src={portrait} alt="" className="h-full w-full object-cover" /> : <UserRound className="h-14 w-14 text-white/50" />}
+            <div className="flex aspect-[4/3] w-full items-center justify-center overflow-hidden p-5 sm:aspect-auto sm:h-full">
+              {portrait ? <img src={portrait} alt="" className="h-full w-full object-contain" /> : <UserRound className="h-14 w-14 text-white/50" />}
             </div>
           </div>
           <div className="p-5 sm:p-7">
